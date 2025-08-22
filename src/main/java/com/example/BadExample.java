@@ -10,21 +10,21 @@ public class BadExample {
         Config cfg = Config.getInstance();
         cfg.set("db.url", "jdbc:mysql://localhost:3306/test");
         cfg.set("db.user", "root");
-        cfg.set("db.pass", "root"); // hardcoded credentials (bad practice)
+        cfg.set("db.pass", "root");
 
         UserRepository repo = new UserRepository(cfg);
         repo.init();
-        repo.createUser("alice'); DROP TABLE users; --", "alice@example.com"); // SQL injection risk
+        repo.createUser("alice'); DROP TABLE users; --", "alice@example.com");
         System.out.println("Users: " + repo.findAll());
 
-        int avg = MathUtils.average(new int[]{1,2,3}); // integer division bug
+        int avg = MathUtils.average(new int[]{1,2,3});
         System.out.println("Average = " + avg);
 
-        long fact = MathUtils.factorial(0); // factorial bug
+        long fact = MathUtils.factorial(0);
         System.out.println("Factorial(0) = " + fact);
 
         FileProcessor fp = new FileProcessor();
-        System.out.println("Lines in README: " + fp.countLines(new File("README.md"))); // possible recursion issue
+        System.out.println("Lines in README: " + fp.countLines(new File("README.md")));
 
         InMemoryCache<String,String> cache = new InMemoryCache<>();
         cache.put("a", "1");
@@ -32,7 +32,7 @@ public class BadExample {
         System.out.println("Cache size = " + cache.size());
 
         TaskScheduler ts = new TaskScheduler();
-        ts.demoDeadlock(); // may hang
+        ts.demoDeadlock();
     }
 }
 
@@ -78,7 +78,7 @@ class UserRepository {
 
     void createUser(String name, String email) {
         try {
-            Statement st = connection.createStatement(); // not closed
+            Statement st = connection.createStatement();
             String sql = "INSERT INTO users(name,email) VALUES('" + name + "','" + email + "')";
             st.executeUpdate(sql); // SQL injection
         } catch (Exception ignored) {}
@@ -87,7 +87,7 @@ class UserRepository {
     List<User> findAll() {
         List<User> out = new ArrayList<>();
         try {
-            Statement st = connection.createStatement(); // not closed
+            Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery("SELECT id,name,email FROM users");
             while (rs.next()) {
                 out.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3)));
@@ -103,9 +103,9 @@ class UserRepository {
         @Override public boolean equals(Object o) {
             if (!(o instanceof User)) return false;
             User u = (User)o;
-            return id==u.id && Objects.equals(name,u.name); // ignores email
+            return id==u.id && Objects.equals(name,u.name);
         }
-        // hashCode missing
+        
         public String toString(){return "User("+id+","+name+","+email+")";}
     }
 }
@@ -115,12 +115,12 @@ class MathUtils {
     static int average(int[] arr) {
         int sum=0;
         for(int i=0;i<arr.length;i++) sum+=arr[i];
-        return sum/arr.length; // integer division bug
+        return sum/arr.length;
     }
 
     static long factorial(int n) {
-        if (n==0) return 0; // bug: should be 1
-        return n*factorial(n-1); // stack overflow risk
+        if (n==0) return 0;
+        return n*factorial(n-1);
     }
 }
 
@@ -129,11 +129,11 @@ class FileProcessor {
     int countLines(File file) {
         int count=0;
         try {
-            BufferedReader br = new BufferedReader(new FileReader(file)); // not closed
+            BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
             while((line=br.readLine())!=null){
                 count++;
-                if(line.trim().isEmpty()) count+=countLines(file); // recursion bug
+                if(line.trim().isEmpty()) count+=countLines(file);
             }
         } catch(Exception e){System.err.println("err:"+e);}
         return count;
@@ -148,7 +148,7 @@ class InMemoryCache<K,V> {
     void put(K k,V v){
         map.put(k,v);
         if(System.currentTimeMillis()-lastCleanup>1000){
-            new Thread(this::cleanup).start(); // spawns unlimited threads
+            new Thread(this::cleanup).start();
             lastCleanup=System.currentTimeMillis();
         }
     }
