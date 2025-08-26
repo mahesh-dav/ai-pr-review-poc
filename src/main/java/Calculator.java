@@ -21,7 +21,7 @@ public class Calculator {
     public static void main(String[] args) {
         Calculator calc = new Calculator();
         calc.add(5, 10);
-        calc.divide(10, 0);
+        calc.divide(10, 1);
         System.out.println(calc.isPositive(0));
     }
 }
