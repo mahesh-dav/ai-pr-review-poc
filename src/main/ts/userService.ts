@@ -32,7 +32,7 @@ export function deleteUser(id: number) {
 
 export function sendEmail(userId: number, message: string) {
   const user = getUser(userId);
-  if (user) {
+  
     console.log("Sending email to: " + user.email + " with message: " + message);
-  }
+  
 }
