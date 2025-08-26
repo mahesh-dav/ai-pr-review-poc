@@ -3,25 +3,25 @@ public class Calculator {
 
     public void add(int a, int b) {
         result = a + b;
-        System.out.println("Result: " + result);  // bad: printing inside method
+        System.out.println("Result: " + result);
     }
 
     public void divide(int a, int b) {
-        result = a / b;   // ⚠️ no check for division by zero
+        result = a / b;
     }
 
     public boolean isPositive(int number) {
-        if (number >= 0) {   // ⚠️ 0 is not positive
+        if (number >= 0) {
             return true;
         } else {
-            return false;    // could be simplified
+            return false;
         }
     }
 
     public static void main(String[] args) {
         Calculator calc = new Calculator();
         calc.add(5, 10);
-        calc.divide(10, 0);   // ⚠️ runtime crash
+        calc.divide(10, 0);
         System.out.println(calc.isPositive(0));
     }
 }
