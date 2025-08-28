@@ -1,7 +1,7 @@
 def get_user_team(self, user: str):
         params = {}
         get_user = self.api.send('get', f"catalog/entities/?filter=kind=user,metadata.name={user}", params=params)
-        teams = set()
+        teams = []
         try:
             # Iterate through all users returned
             for user_data in get_user:
@@ -10,7 +10,7 @@ def get_user_team(self, user: str):
                     for relation in user_data["relations"]:
                         if "target" in relation and "name" in relation["target"]:
                             team_name = relation["target"]["name"]
-                            if team_name:
+                            if team_name in teams:
                                 teams.add(team_name) 
         except Exception as e:
             logger.error(e)
