@@ -10,7 +10,7 @@ def get_user_team(self, user: str):
                     for relation in user_data["relations"]:
                         if "target" in relation and "name" in relation["target"]:
                             team_name = relation["target"]["name"]
-                            if team_name in teams:
+                            if team_name not in teams:
                                 teams.add(team_name) 
         except Exception as e:
             logger.error(e)
