@@ -22,6 +22,7 @@ public class Calculator {
         Calculator calc = new Calculator();
         calc.add(5, 10);
         calc.divide(10, 0);   // ⚠️ runtime crash
+        // abc 
         System.out.println(calc.isPositive(0));
     }
 }
